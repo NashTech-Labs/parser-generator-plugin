@@ -1,6 +1,6 @@
 Motivation:
 
-<p><a href="https://calcite.apache.org/">Apache Calcite</a> has an in-built Sql Parser. This plugin helps to keep the template files and configuration to a different project. Thus,allowing to have cleaner build structure and project dependencies.</p>
+<p><a href="https://calcite.apache.org/">Apache Calcite</a> has an in-built Sql Parser. This plugin helps to keep the template files and configuration to a different project. Thus, allowing to have cleaner build structure and project dependencies.</p>
 
 Configurations:
 
@@ -24,7 +24,7 @@ Usage:
 
 1) compileParserSource : Compile java sources from $outputDirectory and project build's javaSource into $outputJar
 
-2) generateParserSource : Create java sources from templates in $outputTemplateDirectory from $outputDirectory
+2) generateParserSource : Create java sources from templates in $outputTemplateDirectory in $outputDirectory
 
 3) generateParserTemplate : Create templates files from $codegenDirectory into $outputTemplateDirectory.
 
