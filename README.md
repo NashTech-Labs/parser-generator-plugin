@@ -30,21 +30,20 @@ Usage:
 
 Each task aggregates dependent task.
    
-Example: 
+Example to support incremental compilation: 
  <pre>
     import scala.reflect.io.{Directory, File}
     val project=project
             .in(file("example"))
             .enablePlugins(ParserGeneratorPlugin)
             .settings(
-                codegenDirectory := Directory(baseDirectory.value / "src/main/codegen"),
-                outputTemplateDirectory := Directory(target.value / "fmpp"),
-                outputDirectory := Directory(target.value / "javacc"),
-                packageName := "my.package",
-                outputJar := File(target.value / "generated" / "my_example.jar"),
-                javacOptions ++= Seq(
-                    "-classpath",
-                    (Compile / dependencyClasspath).value.map(file => file.data.getAbsolutePath).mkString(":")
+               codegenDirectory := Directory(baseDirectory.value / "src/main/codegen"),
+               outputTemplateDirectory := Directory(target.value / "fmpp"),
+               outputDirectory := Directory(target.value / "javacc"),
+               packageName := "com.example.package",   
+               Compile / sourceGenerators := Seq(
+                  Def.task(
+                     generateParserSource.value.deepFiles.filter(_.isFile).map(_.jfile).toSeq
+                  ).taskValue)
             )
-  )
 </pre>
