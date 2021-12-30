@@ -1,6 +1,6 @@
 Motivation:
 
-<p><a href="https://calcite.apache.org/">Apache Calcite</a> has an in-built Sql Parser. This plugin helps to keep the template files and configuration to a different project. Thus, allowing to have cleaner build structure and project dependencies.</p>
+<p><a href="https://calcite.apache.org/">Apache Calcite</a> has an in-built Sql Parser. This plugin helps to keep the template files and configuration to a different project. Thus,allowing to have cleaner build structure and project dependencies.</p>
 
 Configurations:
 
@@ -24,27 +24,26 @@ Usage:
 
 1) compileParserSource : Compile java sources from $outputDirectory and project build's javaSource into $outputJar
 
-2) generateParserSource : Create java sources from templates in $outputTemplateDirectory in $outputDirectory
+2) generateParserSource : Create java sources from templates in $outputTemplateDirectory from $outputDirectory
 
 3) generateParserTemplate : Create templates files from $codegenDirectory into $outputTemplateDirectory.
 
 Each task aggregates dependent task.
    
-Example: 
+Example to support incremental compilation: 
  <pre>
     import scala.reflect.io.{Directory, File}
     val project=project
             .in(file("example"))
             .enablePlugins(ParserGeneratorPlugin)
             .settings(
-                codegenDirectory := Directory(baseDirectory.value / "src/main/codegen"),
-                outputTemplateDirectory := Directory(target.value / "fmpp"),
-                outputDirectory := Directory(target.value / "javacc"),
-                packageName := "my.package",
-                outputJar := File(target.value / "generated" / "my_example.jar"),
-                javacOptions ++= Seq(
-                    "-classpath",
-                    (Compile / dependencyClasspath).value.map(file => file.data.getAbsolutePath).mkString(":")
+               codegenDirectory := Directory(baseDirectory.value / "src/main/codegen"),
+               outputTemplateDirectory := Directory(target.value / "fmpp"),
+               outputDirectory := Directory(target.value / "javacc"),
+               packageName := "com.example.package",   
+               Compile / sourceGenerators := Seq(
+                  Def.task(
+                     generateParserSource.value.deepFiles.filter(_.isFile).map(_.jfile).toSeq
+                  ).taskValue)
             )
-  )
 </pre>
